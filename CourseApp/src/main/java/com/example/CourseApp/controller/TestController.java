@@ -17,10 +17,5 @@ public class TestController {
     @Autowired
     CourseService courseService;
 
-    @GetMapping
-    public Course getCourses() throws JsonProcessingException {
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ0cGEiOjYsImNvdXJzZSI6MTEsImlhdCI6MTcxMzQ4NDgwMCwiZXhwIjoxNzEzNTcxMjAwfQ.5iBit5NbZD7nA3NKeZPhEYxzpl1BgLA0pYws8nARtfg";
-        return courseService.addCourse(courseService.getCourse(token),token);
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.CourseApp.service;
 
+import com.example.CourseApp.dto.ApiUrlRequest;
 import com.example.CourseApp.model.ProviderCourse;
 import com.example.CourseApp.model.course.Author;
 import com.example.CourseApp.model.course.Course;
@@ -43,8 +44,7 @@ public class CourseService {
         return course;
     }
 
-    public Course getCourse(String token) throws JsonProcessingException {
-        String url =  "http://"+"localhost:8080"+"/tpa/getcoursebyid?id=11";
+    public Course getCourse(String token,String url) throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -62,8 +62,20 @@ public class CourseService {
         }
     }
 
-    public Course addCourse(Course course,String token){
+    public Course addCourse(Course course, String token, ApiUrlRequest apiUrlRequest){
         course.setToken(token);
+        course.setCourseApi(apiUrlRequest.courseApi());
+        course.getChapters().forEach(chapter -> {
+            chapter.getLessons().forEach(lesson -> {
+                lesson.setLessonApi(apiUrlRequest.lessonApi()+lesson.getLesson_id());
+            });
+        });
+        Author author = Author.builder()
+                .name(course.getAuthor().getName())
+                .description(course.getAuthor().getDescription())
+                .email(course.getAuthor().getEmail())
+                .build();
+        course.setAuthor(author);
         return courseRepository.save(course);
 
     }

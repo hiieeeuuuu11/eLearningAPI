@@ -29,6 +29,8 @@ public class Lesson {
     String videoUrl;
     String textUrl;
 
+    String lessonApi;
+
     @ManyToOne @JoinColumn(name = "chapter_id") @JsonBackReference
     Chapter chapter_id;
 

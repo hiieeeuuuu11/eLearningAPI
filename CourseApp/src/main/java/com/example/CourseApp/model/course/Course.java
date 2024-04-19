@@ -33,6 +33,8 @@ public class Course {
 
     String token;
 
+    String courseApi;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id",referencedColumnName = "id")
     @JsonManagedReference
@@ -42,7 +44,5 @@ public class Course {
     @JsonBackReference("reference1")
     Author author;
 
-    @ManyToOne @JoinColumn(name = "provider_id") @JsonBackReference()
-    ProviderCourse providerCourse;
 
 }
