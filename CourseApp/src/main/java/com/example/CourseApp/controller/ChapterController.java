@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chapter")
+@CrossOrigin("*")
 public class ChapterController {
 
     @Autowired
