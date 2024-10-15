@@ -18,7 +18,7 @@ public class ProviderController {
 
     @GetMapping
     public List<Provider> getAllProviders() {
-        return ProviderService.g;
+        return ProviderService.getProviders();
     }
 
     @GetMapping("/{id}")

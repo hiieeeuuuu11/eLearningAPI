@@ -1,6 +1,5 @@
 package com.example.CourseApp.entity.course;
 
-import com.example.api_course_producer.constant.QuestionType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
