@@ -1,10 +1,8 @@
-package com.example.CourseApp.model.course;
+package com.example.CourseApp.entity.course;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "topic")
 @Entity
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Topic {
 
     @Id

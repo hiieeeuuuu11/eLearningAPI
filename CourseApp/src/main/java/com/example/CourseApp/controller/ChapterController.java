@@ -1,6 +1,6 @@
 package com.example.CourseApp.controller;
 
-import com.example.CourseApp.model.course.Chapter;
+import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.service.ChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

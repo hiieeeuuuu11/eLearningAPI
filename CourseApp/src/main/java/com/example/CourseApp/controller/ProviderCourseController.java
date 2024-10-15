@@ -1,7 +1,8 @@
 package com.example.CourseApp.controller;
 
-import com.example.CourseApp.model.ProviderCourse;
-import com.example.CourseApp.service.ProviderCourseService;
+import com.example.CourseApp.entity.course.Provider;
+import com.example.CourseApp.service.ProviderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,37 +10,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/provider-courses")
 @CrossOrigin("*")
-public class ProviderCourseController {
+@RequiredArgsConstructor
+public class ProviderController {
 
-    private final ProviderCourseService providerCourseService;
-
-    public ProviderCourseController(ProviderCourseService providerCourseService) {
-        this.providerCourseService = providerCourseService;
-    }
+    private final ProviderService ProviderService;
+    
 
     @GetMapping
-    public List<ProviderCourse> getAllProviderCourses() {
-        return providerCourseService.getAllProviderCourses();
+    public List<Provider> getAllProviders() {
+        return ProviderService.g;
     }
 
     @GetMapping("/{id}")
-    public ProviderCourse getProviderCourseById(@PathVariable int id) {
-        return providerCourseService.getProviderCourseById(id);
+    public Provider getProviderById(@PathVariable int id) {
+        return ProviderService.getProviderById(id);
     }
 
     @PostMapping
-    public ProviderCourse createProviderCourse(@RequestBody ProviderCourse providerCourse) {
-        return providerCourseService.createProviderCourse(providerCourse);
+    public Provider createProvider(@RequestBody Provider Provider) {
+        return ProviderService.createProvider(Provider);
     }
 
     @PutMapping("/{id}")
-    public ProviderCourse updateProviderCourse(@PathVariable int id, @RequestBody ProviderCourse providerCourse) {
-        return providerCourseService.updateProviderCourse(id, providerCourse);
+    public Provider updateProvider(@PathVariable int id, @RequestBody Provider Provider) {
+        return ProviderService.updateProvider(id, Provider);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProviderCourse(@PathVariable int id) {
-        providerCourseService.deleteProviderCourse(id);
+    public void deleteProvider(@PathVariable int id) {
+        ProviderService.deleteProvider(id);
     }
 
 

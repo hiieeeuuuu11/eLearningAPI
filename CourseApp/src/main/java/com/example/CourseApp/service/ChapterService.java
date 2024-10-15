@@ -1,20 +1,21 @@
 package com.example.CourseApp.service;
 
-import com.example.CourseApp.model.course.Chapter;
-import com.example.CourseApp.model.course.Course;
+import com.example.CourseApp.entity.course.Chapter;
+import com.example.CourseApp.entity.course.Course;
 import com.example.CourseApp.repository.ChapterRepository;
 import com.example.CourseApp.repository.CourseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
+@RequiredArgsConstructor
 public class ChapterService {
 
-    @Autowired
-    ChapterRepository chapterRepository;
-    @Autowired
-    CourseRepository courseRepository;
+    private final ChapterRepository chapterRepository;
+
+    private final CourseRepository courseRepository;
 
 
     public List<Chapter> getallChapter () {
@@ -22,17 +23,15 @@ public class ChapterService {
     }
 
     public List<Chapter> getChapterbyCourse(int course_id){
-        Course course  = courseRepository.findById(course_id).orElse(null);
-        return course.getChapters();
+        return chapterRepository.findChaptersByCourse_Id(course_id);
     }
 
     public int getNumberOfChapter(int course_id) {
-        return courseRepository.getNumberOfChapter(course_id);
+        return chapterRepository.countByCourse_Id(course_id);
     }
 
     public Chapter getChapterbyId(int id){
-        Chapter chapter  = chapterRepository.findById(id).orElse(null);
-        return chapter;
+        return chapterRepository.findById(id).orElse(null);
     }
 
 }

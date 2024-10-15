@@ -1,12 +1,13 @@
 package com.example.CourseApp.repository;
 
-import com.example.CourseApp.model.course.Course;
+import com.example.CourseApp.entity.course.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course,Integer> {
+    List<Course> findCoursesByProviderId(int provider_id);
 
-    @Query(value = "SELECT COUNT(id) FROM chapter WHERE course_id = :course_id",nativeQuery = true)
-    int getNumberOfChapter(int course_id);
+    List<Course> findCoursesByTopicId(int topic_id);
 
 }
