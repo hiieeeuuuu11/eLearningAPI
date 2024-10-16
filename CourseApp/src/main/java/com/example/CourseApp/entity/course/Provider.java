@@ -25,7 +25,7 @@ public class Provider {
 
     String description;
 
-    String email;
+   // String email;
 
     @OneToMany
     @JoinColumn(name = "author",referencedColumnName = "id")
