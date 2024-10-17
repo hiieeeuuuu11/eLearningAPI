@@ -26,6 +26,7 @@ public class ChapterTest {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "time_limit")
     private Integer timeLimit;
 
 }
