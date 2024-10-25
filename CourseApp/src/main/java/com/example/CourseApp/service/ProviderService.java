@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProviderService {
     private final ProviderRepository providerRepository;
+
     public List<Provider> getProviders() {
         return providerRepository.findAll();
     }

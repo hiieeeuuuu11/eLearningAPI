@@ -23,7 +23,7 @@ public class Course {
     Provider provider;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "topic_id")
     Topic topic;
 
     @Column(nullable = false)
