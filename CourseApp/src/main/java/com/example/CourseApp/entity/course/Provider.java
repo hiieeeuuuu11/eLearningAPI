@@ -18,21 +18,12 @@ import java.util.List;
 public class Provider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     String name;
 
     String description;
 
-   // String email;
-
-    @OneToMany
-    @JoinColumn(name = "author",referencedColumnName = "id")
-    @JsonManagedReference("reference1")
-    @JsonIgnore
-    List<Course> course;
-
-
+    String website;
 
 }
