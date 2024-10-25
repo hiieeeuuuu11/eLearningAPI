@@ -1,4 +1,4 @@
-package com.example.CourseApp.constant;
+package com.example.CourseApp.share.enums;
 
 public enum QuestionType {
     MULTIPLE_CHOICE,

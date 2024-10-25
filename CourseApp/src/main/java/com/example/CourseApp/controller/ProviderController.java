@@ -26,20 +26,5 @@ public class ProviderController {
         return ProviderService.getProviderById(id);
     }
 
-    @PostMapping
-    public Provider createProvider(@RequestBody Provider Provider) {
-        return ProviderService.createProvider(Provider);
-    }
-
-    @PutMapping("/{id}")
-    public Provider updateProvider(@PathVariable int id, @RequestBody Provider Provider) {
-        return ProviderService.updateProvider(id, Provider);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteProvider(@PathVariable int id) {
-        ProviderService.deleteProvider(id);
-    }
-
 
 }

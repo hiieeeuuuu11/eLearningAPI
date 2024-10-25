@@ -4,6 +4,7 @@ import com.example.CourseApp.repository.ProviderRepository;
 import com.example.CourseApp.repository.ChapterRepository;
 import com.example.CourseApp.repository.CourseRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,18 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CourseService {
 
-    @Autowired
     CourseRepository courseRepository;
-
-    @Autowired
     ChapterRepository chapterRepository;
-
-    @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
     ProviderRepository providerRepository;
 
     public List<Course> getAllCourse() {
