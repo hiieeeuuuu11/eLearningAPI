@@ -144,7 +144,12 @@ public class ApiExceptionHandler {
 
   @ExceptionHandler(HandlerMethodValidationException.class)
   public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
-    return ResponseEntity.badRequest().body(ErrorResponse.error(e.getAllErrors().getFirst().getDefaultMessage()));
+    String errorMessage = e.getAllErrors().isEmpty()
+            ? "Unknown validation error"
+            : e.getAllErrors().get(0).getDefaultMessage();
+
+    return ResponseEntity.badRequest().body(ErrorResponse.error(errorMessage));
   }
+
 
 }

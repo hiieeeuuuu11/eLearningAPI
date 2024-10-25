@@ -2,6 +2,12 @@ package com.example.CourseApp.controller;
 
 import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.service.ChapterService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,27 +16,49 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chapter")
-@CrossOrigin("*")
+@Tag(name = "Chapter", description = "APIs for get chapter")
 public class ChapterController {
 
     @Autowired
-    ChapterService chapterService;
+    private ChapterService chapterService;
 
     @GetMapping
+    @Operation(summary = "Lấy tất cả các chương")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lấy thành công"),
+            @ApiResponse(responseCode = "404", description = "Không tìm thấy chương")
+    })
     public List<Chapter> getAllProviderChapters() {
-        return chapterService.getallChapter();
+        return chapterService.getAllChapter();
     }
 
     @GetMapping("/getbyid")
+    @Operation(summary = "Lấy chương theo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lấy thành công"),
+            @ApiResponse(responseCode = "404", description = "Chương không tồn tại")
+    })
     public ResponseEntity<Chapter> getChapterById(@RequestParam("id") int id) {
-        return ResponseEntity.ok(chapterService.getChapterbyId(id));
+        return ResponseEntity.ok(chapterService.getChapterById(id));
     }
 
     @GetMapping("/getbycourse")
+    @Operation(summary = "Lấy chương theo khóa học")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lấy thành công"),
+            @ApiResponse(responseCode = "404", description = "Không tìm thấy chương cho khóa học")
+    })
     public ResponseEntity<List<Chapter>> getChapterByCourse(@RequestParam("course-id") int id) {
-        return ResponseEntity.ok(chapterService.getChapterbyCourse(id));
+        return ResponseEntity.ok(chapterService.getChapterByCourse(id));
     }
 
-
-
+    @GetMapping("/getnumofChap")
+    @Operation(summary = "Đếm số lượng chương theo khóa học")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Đếm thành công"),
+            @ApiResponse(responseCode = "404", description = "Khóa học không tồn tại")
+    })
+    public ResponseEntity<Integer> getNumberOfChapter(@RequestParam("course-id") int id) {
+        return ResponseEntity.ok(chapterService.getNumberOfChapter(id));
+    }
 }

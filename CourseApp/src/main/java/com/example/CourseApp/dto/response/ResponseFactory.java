@@ -3,8 +3,8 @@ package com.example.CourseApp.dto.response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static com.example.api_course_producer.share.constants.Constants.FAIL_MESSAGE;
-import static com.example.api_course_producer.share.constants.Constants.SUCCESS_MESSAGE;
+import static com.example.CourseApp.share.constants.Constants.FAIL_MESSAGE;
+import static com.example.CourseApp.share.constants.Constants.SUCCESS_MESSAGE;
 
 public final class ResponseFactory {
 
