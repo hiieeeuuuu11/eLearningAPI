@@ -19,7 +19,9 @@ public enum ResponseStatusCodeConst {
   LESSON_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Bài học không tồn tại với ID: "),
   NO_PROVIDER_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy nhà cung cấp!"),
   PROVIDER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Nhà cung cấp không tồn tại với ID: "),
-  PROVIDER_EXISTED(HttpStatus.BAD_REQUEST.value(), "Nhà cung cấp đã tồn tại!");
+  PROVIDER_EXISTED(HttpStatus.BAD_REQUEST.value(), "Nhà cung cấp đã tồn tại!"),
+    NO_TOPIC_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy chủ đề!"),
+    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "Chủ đề không tồn tại với ID: ");
 
   private final int httpCode;
   private final String message;
