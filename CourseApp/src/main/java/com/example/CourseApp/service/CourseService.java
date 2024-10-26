@@ -17,40 +17,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
 
-    private final CourseRepository courseRepository;
-    private final ChapterRepository chapterRepository;
-    private final ObjectMapper objectMapper;
-    private final ProviderRepository providerRepository;
+  private final CourseRepository courseRepository;
+  private final ChapterRepository chapterRepository;
+  private final ObjectMapper objectMapper;
+  private final ProviderRepository providerRepository;
 
-    public List<Course> getAllCourse() {
-        List<Course> courses = courseRepository.findAll();
-        if (courses.isEmpty()) {
-            throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND);
-        }
-        return courses;
+  public List<Course> getAllCourse() {
+    List<Course> courses = courseRepository.findAll();
+    if (courses.isEmpty()) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND);
     }
+    return courses;
+  }
 
-    public Course getCourseById(int course_id) {
-        return courseRepository.findById(course_id)
-                .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.COURSE_NOT_FOUND));
-    }
+  public Course getCourseById(int course_id) {
+    return courseRepository
+        .findById(course_id)
+        .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.COURSE_NOT_FOUND));
+  }
 
-    public List<Course> getCourseByProvider(int provider_id) {
-        if (!providerRepository.existsById(provider_id)) {
-            throw new BadRequestException("Provider không tồn tại với ID: " + provider_id);
-        }
-        List<Course> courses = courseRepository.findCoursesByProviderId(provider_id);
-        if (courses.isEmpty()) {
-            throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_PROVIDER);
-        }
-        return courses;
+  public List<Course> getCourseByProvider(int provider_id) {
+    if (!providerRepository.existsById(provider_id)) {
+      throw new BadRequestException("Provider không tồn tại với ID: " + provider_id);
     }
+    List<Course> courses = courseRepository.findCoursesByProviderId(provider_id);
+    if (courses.isEmpty()) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_PROVIDER);
+    }
+    return courses;
+  }
 
-    public List<Course> getCourseByTopic(int topic_id) {
-        List<Course> courses = courseRepository.findCoursesByTopicId(topic_id);
-        if (courses.isEmpty()) {
-            throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_TOPIC);
-        }
-        return courses;
+  public List<Course> getCourseByTopic(int topic_id) {
+    if (!courseRepository.existsById(topic_id)) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_TOPIC);
     }
+    return courseRepository.findCoursesByTopicId(topic_id);
+  }
 }

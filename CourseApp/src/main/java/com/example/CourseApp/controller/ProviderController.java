@@ -20,8 +20,6 @@ public class ProviderController {
   @Autowired private ProviderService providerService;
 
   @GetMapping
-  @Operation(summary = "Lấy tất cả nhà cung cấp")
-  @ApiResponse(responseCode = "200", description = "Lấy thành công")
   public List<Provider> getAllProviders() {
     return providerService.getProviders();
   }

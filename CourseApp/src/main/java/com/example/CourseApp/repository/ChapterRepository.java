@@ -11,4 +11,5 @@ public interface ChapterRepository extends JpaRepository<Chapter,Integer> {
 
     Integer countByCourse_Id(int course_id);
 
+
 }

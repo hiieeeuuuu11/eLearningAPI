@@ -5,10 +5,10 @@ import com.example.CourseApp.exceptions.ObjectNotFoundException;
 import com.example.CourseApp.repository.ProviderRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +24,28 @@ public class ProviderService {
   }
 
   public Provider getProviderById(int id) {
-    return providerRepository.findById(id);
+    return providerRepository.findById(id)
+        .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND));
   }
 
   public Provider createProvider(Provider provider) {
+      if(providerRepository.existsById(provider.getId())){
+          throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_EXISTED);
+      }
     return providerRepository.save(provider);
   }
 
   public Provider updateProvider(int id, Provider provider) {
+      if(!providerRepository.existsById(id)){
+          throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND);
+      }
     return providerRepository.save(provider);
   }
 
   public void deleteProvider(int id) {
+      if(!providerRepository.existsById(id)){
+          throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND);
+      }
     providerRepository.deleteById(id);
   }
 }
