@@ -1,5 +1,6 @@
 package com.example.CourseApp.entity.course;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,15 +19,15 @@ public class Lesson {
 
     String title;
 
-    String description;
-
-    String content;
+    Integer position;
 
     String videoUrl;
 
     String textUrl;
 
-    @ManyToOne @JoinColumn(name = "chapter_id")
+    @ManyToOne
+    @JoinColumn(name = "chapter_id")
+    @JsonIgnore
     Chapter chapter;
 
 }

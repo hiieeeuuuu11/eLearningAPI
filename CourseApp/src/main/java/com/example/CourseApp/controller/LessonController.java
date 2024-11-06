@@ -20,25 +20,24 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
-    @GetMapping("/getbyId")
+    @GetMapping("/{id}")
     @Operation(summary = "Lấy bài học theo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Bài học không tồn tại")
     })
-    public ResponseEntity<Lesson> getLessonById(@RequestParam("lesson_id") String id) {
-        int id1 = Integer.parseInt(id);
-        return ResponseEntity.ok(lessonService.getLessonById(id1));
+    public ResponseEntity<Lesson> getLessonById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(lessonService.getLessonbyId(id));
     }
 
-    @GetMapping("/getbychapter")
+    @GetMapping("/getbychapter/{id}")
     @Operation(summary = "Lấy bài học theo chương")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Không tìm thấy bài học cho chương")
     })
-    public ResponseEntity<List<Lesson>> getLessonByChapter(@RequestParam("lesson_id") String id) {
+    public ResponseEntity<List<Lesson>> getLessonByChapter(@PathVariable("id") String id) {
         int id1 = Integer.parseInt(id);
-        return ResponseEntity.ok(lessonService.getLessonByChapter(id1));
+        return ResponseEntity.ok(lessonService.getLessonByChapterId(id1));
     }
 }

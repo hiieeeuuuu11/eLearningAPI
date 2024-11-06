@@ -27,13 +27,13 @@ public class CourseController {
         return courseService.getAllCourse();
     }
 
-    @GetMapping("/getbyid")
+    @GetMapping("/{id}")
     @Operation(summary = "Lấy khóa học theo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Khóa học không tồn tại")
     })
-    public ResponseEntity<Course> getProviderCourseById(@RequestParam("id") String id) {
+    public ResponseEntity<Course> getProviderCourseById(@PathVariable("id") String id) {
         int id1 = Integer.parseInt(id);
         return ResponseEntity.ok(courseService.getCourseById(id1));
     }

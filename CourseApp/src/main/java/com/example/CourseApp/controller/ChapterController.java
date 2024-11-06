@@ -1,5 +1,6 @@
 package com.example.CourseApp.controller;
 
+import com.example.CourseApp.dto.response.BaseResponse;
 import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.service.ChapterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,13 +33,13 @@ public class ChapterController {
         return chapterService.getAllChapter();
     }
 
-    @GetMapping("/getbyid")
+    @GetMapping("/{id}")
     @Operation(summary = "Lấy chương theo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Chương không tồn tại")
     })
-    public ResponseEntity<Chapter> getChapterById(@RequestParam("id") int id) {
+    public ResponseEntity<Chapter> getChapterById(@PathVariable("id") int id) {
         return ResponseEntity.ok(chapterService.getChapterById(id));
     }
 
@@ -48,7 +49,7 @@ public class ChapterController {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Không tìm thấy chương cho khóa học")
     })
-    public ResponseEntity<List<Chapter>> getChapterByCourse(@RequestParam("course-id") int id) {
+    public ResponseEntity<List<Chapter>> getChapterByCourse(@RequestParam("course_id") int id) {
         return ResponseEntity.ok(chapterService.getChapterByCourse(id));
     }
 
@@ -58,7 +59,7 @@ public class ChapterController {
             @ApiResponse(responseCode = "200", description = "Đếm thành công"),
             @ApiResponse(responseCode = "404", description = "Khóa học không tồn tại")
     })
-    public ResponseEntity<Integer> getNumberOfChapter(@RequestParam("course-id") int id) {
-        return ResponseEntity.ok(chapterService.getNumberOfChapter(id));
+    public ResponseEntity<BaseResponse<?>> getNumberOfChapter(@RequestParam("course_id") int id) {
+        return ResponseEntity.ok(BaseResponse.builder().data(chapterService.getNumberOfChapter(id)).build());
     }
 }
