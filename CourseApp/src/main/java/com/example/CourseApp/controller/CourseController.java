@@ -1,5 +1,6 @@
 package com.example.CourseApp.controller;
 
+import com.example.CourseApp.dto.response.CourseResponseDTO;
 import com.example.CourseApp.entity.course.Course;
 import com.example.CourseApp.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,7 @@ public class CourseController {
     @GetMapping
     @Operation(summary = "Lấy tất cả các khóa học")
     @ApiResponse(responseCode = "200", description = "Lấy thành công")
-    public List<Course> getAllProviderCourses() {
+    public List<CourseResponseDTO> getAllProviderCourses() {
         return courseService.getAllCourse();
     }
 
@@ -33,7 +34,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Khóa học không tồn tại")
     })
-    public ResponseEntity<Course> getProviderCourseById(@PathVariable("id") String id) {
+    public ResponseEntity<CourseResponseDTO> getProviderCourseById(@PathVariable("id") String id) {
         int id1 = Integer.parseInt(id);
         return ResponseEntity.ok(courseService.getCourseById(id1));
     }
@@ -44,7 +45,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Không tìm thấy khóa học cho nhà cung cấp")
     })
-    public ResponseEntity<List<Course>> getCourseByProvider(@RequestParam("provider_id") String id) {
+    public ResponseEntity<List<CourseResponseDTO>> getCourseByProvider(@RequestParam("provider_id") String id) {
         int id1 = Integer.parseInt(id);
         return ResponseEntity.ok(courseService.getCourseByProvider(id1));
     }
@@ -55,7 +56,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Lấy thành công"),
             @ApiResponse(responseCode = "404", description = "Không tìm thấy khóa học cho chủ đề")
     })
-    public ResponseEntity<List<Course>> getCourseByTopic(@RequestParam("topic_id") String id) {
+    public ResponseEntity<List<CourseResponseDTO>> getCourseByTopic(@RequestParam("topic_id") String id) {
         int id1 = Integer.parseInt(id);
         return ResponseEntity.ok(courseService.getCourseByTopic(id1));
     }
