@@ -1,6 +1,5 @@
 package com.example.CourseApp.entity.course;
 
-import com.example.CourseApp.share.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +19,7 @@ public class Enrollment {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    Student student;
+    Learner learner;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

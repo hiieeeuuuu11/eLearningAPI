@@ -5,12 +5,14 @@ import com.example.CourseApp.dto.response.OrderRequestDTO;
 import com.example.CourseApp.entity.course.Order;
 import com.example.CourseApp.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -34,7 +36,9 @@ public class PaymentController {
     }
 
     @GetMapping("/vnpay-payment-return")
-    public Map<String, Object> paymentCompleted(HttpServletRequest request) {
-        return paymentService.paymentCompleted(request);
+    public void paymentCompleted(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> result = paymentService.paymentCompleted(request);
+        response.sendRedirect("http://127.0.0.1:5500/courses.html");
+
     }
 }

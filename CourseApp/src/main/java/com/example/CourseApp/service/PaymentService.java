@@ -4,9 +4,11 @@ import com.example.CourseApp.config.VNPAYConfig;
 import com.example.CourseApp.entity.course.Course;
 import com.example.CourseApp.entity.course.Order;
 import com.example.CourseApp.entity.course.Payment;
-import com.example.CourseApp.entity.course.Student;
+import com.example.CourseApp.entity.course.Learner;
+import com.example.CourseApp.exceptions.BadRequestException;
 import com.example.CourseApp.exceptions.ObjectNotFoundException;
 import com.example.CourseApp.repository.CourseRepository;
+import com.example.CourseApp.repository.LearnerRepository;
 import com.example.CourseApp.repository.OrderRepository;
 import com.example.CourseApp.repository.PaymentRepository;
 import com.example.CourseApp.share.enums.PaymentStatus;
@@ -32,6 +34,8 @@ public class PaymentService {
     private OrderRepository orderRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private LearnerRepository learnerRepository;
     private BigDecimal calculateTotalPrice(List<Integer> courseID) {
         List<Course> courses = courseRepository.findAllById(courseID);
 
@@ -44,7 +48,11 @@ public class PaymentService {
     }
     public Integer reserveSeats(Integer userId , List<Integer> courseId){
         Order order = new Order();
-        order.setStudent(new Student(2));
+        if (!learnerRepository.existsByUserId(userId)) {
+            throw new BadRequestException("Learner không tồn tại với userID: " + userId);
+        }
+        Learner learner = learnerRepository.findByUserId(userId);
+        order.setLearner(learner);
         order.setTotalAmount(calculateTotalPrice(courseId).intValue());
         order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);

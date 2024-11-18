@@ -20,7 +20,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    Student student;
+    Learner learner;
 
     Integer totalAmount;
 

@@ -7,13 +7,16 @@ import lombok.experimental.FieldDefaults;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "students")
+@Table(name = "learner")
 @Entity
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Student {
+public class Learner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 }
