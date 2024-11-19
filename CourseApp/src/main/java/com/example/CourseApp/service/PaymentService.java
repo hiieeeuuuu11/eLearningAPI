@@ -1,21 +1,16 @@
 package com.example.CourseApp.service;
 
 import com.example.CourseApp.config.VNPAYConfig;
-import com.example.CourseApp.entity.course.Course;
-import com.example.CourseApp.entity.course.Order;
-import com.example.CourseApp.entity.course.Payment;
-import com.example.CourseApp.entity.course.Learner;
+import com.example.CourseApp.entity.course.*;
 import com.example.CourseApp.exceptions.BadRequestException;
 import com.example.CourseApp.exceptions.ObjectNotFoundException;
-import com.example.CourseApp.repository.CourseRepository;
-import com.example.CourseApp.repository.LearnerRepository;
-import com.example.CourseApp.repository.OrderRepository;
-import com.example.CourseApp.repository.PaymentRepository;
+import com.example.CourseApp.repository.*;
 import com.example.CourseApp.share.enums.PaymentStatus;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import software.amazon.ion.Decimal;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -24,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -36,6 +32,12 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
     @Autowired
     private LearnerRepository learnerRepository;
+    @Autowired
+    private ProviderRepository providerRepository;
+    @Autowired
+    private EnrollmentsRepository enrollmentsRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
     private BigDecimal calculateTotalPrice(List<Integer> courseID) {
         List<Course> courses = courseRepository.findAllById(courseID);
 
@@ -46,16 +48,26 @@ public class PaymentService {
         return totalPrice;
 
     }
-    public Integer reserveSeats(Integer userId , List<Integer> courseId){
+    public Integer reserveSeats(Integer userId , List<Integer> courseIds){
         Order order = new Order();
         if (!learnerRepository.existsByUserId(userId)) {
             throw new BadRequestException("Learner không tồn tại với userID: " + userId);
         }
         Learner learner = learnerRepository.findByUserId(userId);
         order.setLearner(learner);
-        order.setTotalAmount(calculateTotalPrice(courseId).intValue());
+        order.setTotalAmount(calculateTotalPrice(courseIds).intValue());
         order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
+
+        List<OrderItem> orderItems = courseIds.stream().map(courseId -> {
+            Course course = courseRepository.findById(courseId).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND));
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setCourse(course);
+            orderItem.setPrice(course.getPrice());
+            return orderItem;
+        }).toList();
+        orderItemRepository.saveAll(orderItems);
         return order.getId();
     }
     public Map<String, String> submitOrder(HttpServletRequest request, int id) {
@@ -63,7 +75,7 @@ public class PaymentService {
         int orderTotal = order.getTotalAmount()*1000;
         Payment payment = new Payment();
         payment.setOrder(order);
-        payment.setAmount(orderTotal);
+        payment.setAmount(order.getTotalAmount());
         payment.setPaymentStatus(PaymentStatus.pending);
         payment.setPaymentDate(LocalDateTime.now());
         paymentRepository.save(payment);
@@ -88,10 +100,28 @@ public class PaymentService {
         response.put("paymentTime", paymentTime);
         response.put("transactionId", transactionId);
         Payment payment = paymentRepository.findById(Integer.valueOf(paymentId)).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_PAYMENT_FOUND));
+        Order order=orderRepository.findById(payment.getOrder().getId()).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ORDER_FOUND));
+        Learner learner = learnerRepository.findById(order.getLearner().getId()).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_LEARNER_FOUND));
+        int userId = learner.getUser().getId();
+        if (!providerRepository.existsByUserId(learner.getUser().getId())) {
+            throw new BadRequestException("Provider không tồn tại với userID: " + userId);
+        }
+        int providerID = providerRepository.findByUserId(userId).getId();
+        if (!orderItemRepository.existsByOrderId(order.getId())) {
+            throw new BadRequestException("Course không tồn tại với providerId: " + providerID);
+        }
+        Integer courseId = orderItemRepository.findByOrderId(order.getId()).getCourse().getId();
+        Course course = courseRepository.findById(courseId).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND));
+        response.put("courseId",course.getId());
         if (paymentStatus == 1) {
             response.put("message", "Payment Success");
             response.put("status", "success");
             payment.setPaymentStatus(PaymentStatus.completed);
+            Enrollment enrollment = new Enrollment();
+            enrollment.setLearner(learner);
+            enrollment.setCourse(course);
+            enrollment.setEnrollment_date(LocalDateTime.now());
+            enrollmentsRepository.save(enrollment);
         } else {
             response.put("message", "Payment Failed");
             response.put("status", "failed");

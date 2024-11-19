@@ -1,7 +1,6 @@
 package com.example.CourseApp.controller;
 
 import com.example.CourseApp.dto.response.CourseResponseDTO;
-import com.example.CourseApp.entity.course.Course;
 import com.example.CourseApp.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,5 +58,11 @@ public class CourseController {
     public ResponseEntity<List<CourseResponseDTO>> getCourseByTopic(@RequestParam("topic_id") String id) {
         int id1 = Integer.parseInt(id);
         return ResponseEntity.ok(courseService.getCourseByTopic(id1));
+    }
+    @GetMapping("/checkEnrollment")
+    @Operation(summary = "Kiểm tra khóa học đã đăng ký hay chưa")
+    public boolean checkEnrollment(@RequestParam int studentId, @RequestParam int courseId) {
+        return courseService.checkCourseEnrollment(studentId,courseId);
+
     }
 }

@@ -71,7 +71,9 @@ public class CourseService {
     return courses.stream().map(this::mapToCourseResponseDTO).collect(Collectors.toList());
   }
 
-
+  public boolean checkCourseEnrollment(int student_id,int course_id){
+    return enrollmentsRepository.existsByLearnerIdAndCourseId(student_id,course_id);
+  }
   public List<CourseResponseDTO> getCourseByTopic(int topicId) {
     if (!courseRepository.existsById(topicId)) {
       throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_TOPIC);

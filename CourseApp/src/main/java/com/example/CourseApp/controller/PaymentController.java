@@ -38,7 +38,8 @@ public class PaymentController {
     @GetMapping("/vnpay-payment-return")
     public void paymentCompleted(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> result = paymentService.paymentCompleted(request);
-        response.sendRedirect("http://127.0.0.1:5500/courses.html");
+        Integer courseId = (Integer) result.get("courseId");
 
+        response.sendRedirect("http://127.0.0.1:5500/course-details.html?id="+courseId);
     }
 }

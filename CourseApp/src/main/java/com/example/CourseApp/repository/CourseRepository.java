@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course,Integer> {
     List<Course> findCoursesByProviderId(int provider_id);
-
+    Course findCourseByProviderId(int provider_id);
+    boolean existsByProviderId(int provider_id);
     List<Course> findCoursesByTopicId(int topic_id);
 
 }

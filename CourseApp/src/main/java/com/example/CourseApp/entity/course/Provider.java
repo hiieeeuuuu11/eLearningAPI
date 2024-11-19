@@ -1,5 +1,6 @@
 package com.example.CourseApp.entity.course;
 
+import com.example.CourseApp.share.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -25,5 +26,9 @@ public class Provider {
     String description;
 
     String website;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
 }
