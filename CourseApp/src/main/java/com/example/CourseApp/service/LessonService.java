@@ -6,14 +6,11 @@ import com.example.CourseApp.repository.ChapterRepository;
 import com.example.CourseApp.repository.CourseRepository;
 import com.example.CourseApp.repository.LessonRepository;
 import com.example.CourseApp.service.cloud.S3Service;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

@@ -30,15 +30,6 @@ public class CourseService {
   private final EnrollmentsRepository enrollmentsRepository;
   private final ReviewRepository reviewRepository;
 
-  public List<CourseResponseDTO> getAll() {
-    List<Course> courses = courseRepository.findAll();
-
-    if (courses.isEmpty()) {
-      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND);
-    }
-
-    return courses.stream().map(this::mapToCourseResponseDTO).collect(Collectors.toList());
-  }
 
   public List<CourseResponseDTO> getAllCourse() {
     List<Course> courses = courseRepository.findAll();

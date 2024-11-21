@@ -1,10 +1,12 @@
 package com.example.CourseApp.service;
 
+import com.example.CourseApp.dto.response.ChapterResponse;
 import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.exceptions.BadRequestException;
 import com.example.CourseApp.exceptions.ObjectNotFoundException;
 import com.example.CourseApp.repository.ChapterRepository;
 import com.example.CourseApp.repository.CourseRepository;
+import com.example.CourseApp.repository.LessonRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final CourseRepository courseRepository;
+    private final LessonRepository lessonRepository;
 
     public List<Chapter> getAllChapter() {
         List<Chapter> chapters = chapterRepository.findAll();
@@ -44,9 +47,17 @@ public class ChapterService {
         return chapterRepository.countByCourse_Id(course_id);
     }
 
-    public Chapter getChapterById(int id) {
+    public ChapterResponse getChapterById(int id) {
         return chapterRepository.findById(id)
+            .map(chapter1 -> {
+                return ChapterResponse.builder()
+                    .chapter(chapter1)
+                    .lessonList(lessonRepository.findLessonsByChapter_Id(chapter1.getId()))
+                    .build();
+            })
                 .orElseThrow(() ->
                         new ObjectNotFoundException(ResponseStatusCodeConst.CHAPTER_NOT_FOUND));
+
+
     }
 }
