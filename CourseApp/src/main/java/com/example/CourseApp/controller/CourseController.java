@@ -1,16 +1,20 @@
 package com.example.CourseApp.controller;
 
+import com.example.CourseApp.dto.response.ApiResConfigDTO;
 import com.example.CourseApp.dto.response.CourseResponseDTO;
+import com.example.CourseApp.dto.response.OrderRequestDTO;
 import com.example.CourseApp.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/course")
@@ -61,8 +65,19 @@ public class CourseController {
     }
     @GetMapping("/checkEnrollment")
     @Operation(summary = "Kiểm tra khóa học đã đăng ký hay chưa")
-    public boolean checkEnrollment(@RequestParam int studentId, @RequestParam int courseId) {
+    public ApiResConfigDTO checkEnrollment(@RequestParam int studentId, @RequestParam int courseId) {
         return courseService.checkCourseEnrollment(studentId,courseId);
+
+    }
+    @PostMapping("/updateReviews")
+    @Operation(summary = "Cập nhật bảng reviews")
+    public void updateReviews(@RequestParam int enrollmentId, @RequestParam int rating) {
+        courseService.updateReviews(enrollmentId,rating);
+    }
+    @GetMapping("/getRating")
+    @Operation(summary = "Kiểm tra khóa học đã đăng ký hay chưa")
+    public int getReviewRating(@RequestParam int studentId, @RequestParam int courseId) {
+        return courseService.getReviewRating(studentId,courseId);
 
     }
 }
