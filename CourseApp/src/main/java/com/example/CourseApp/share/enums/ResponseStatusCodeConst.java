@@ -25,6 +25,7 @@ public enum ResponseStatusCodeConst {
   NO_ORDER_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy hóa đơn!"),
   NO_PAYMENT_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy thanh toán!"),
   NO_LEARNER_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy người học!"),
+  NO_ENROLLMENT_FOUND(HttpStatus.NOT_FOUND.value(), "Không tìm thấy enrollment!"),
   ;
 
   private final int httpCode;

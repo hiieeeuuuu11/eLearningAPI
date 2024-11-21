@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EnrollmentsRepository extends JpaRepository<Enrollment,Integer> {
     Enrollment findEnrollmentByCourse_Id(int course_id);
-    Enrollment findEnrollmentByLearner_Id(int student_id);
+    Enrollment findEnrollmentByCourseIdAndLearnerId(int course_id,int student_id);
 
     boolean existsByLearnerIdAndCourseId(int student_id,int course_id);
 }

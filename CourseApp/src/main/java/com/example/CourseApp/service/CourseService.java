@@ -1,5 +1,6 @@
 package com.example.CourseApp.service;
 
+import com.example.CourseApp.dto.response.ApiResConfigDTO;
 import com.example.CourseApp.dto.response.CourseResponseDTO;
 import com.example.CourseApp.dto.response.ReviewResponseDTO;
 import com.example.CourseApp.entity.course.Chapter;
@@ -15,7 +16,12 @@ import com.example.CourseApp.repository.EnrollmentsRepository;
 import com.example.CourseApp.repository.ProviderRepository;
 import com.example.CourseApp.repository.ReviewRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,8 +77,38 @@ public class CourseService {
     return courses.stream().map(this::mapToCourseResponseDTO).collect(Collectors.toList());
   }
 
-  public boolean checkCourseEnrollment(int student_id,int course_id){
-    return enrollmentsRepository.existsByLearnerIdAndCourseId(student_id,course_id);
+  public ApiResConfigDTO checkCourseEnrollment(int student_id, int course_id){
+    boolean status = enrollmentsRepository.existsByLearnerIdAndCourseId(student_id, course_id);
+    Integer id = enrollmentsRepository.findEnrollmentByCourseIdAndLearnerId(course_id, student_id).getId();
+    return new ApiResConfigDTO(status, id);
+  }
+  public int getReviewRating(int studentId,int courseId){
+    int rating=0;
+
+    if(reviewRepository.existsByCourseIdAndStudentId(courseId,studentId)){
+      Optional<Review> review = reviewRepository.findReviewByCourseIdAndStudentId(courseId,studentId);
+      rating = review.get().getRating();
+    }
+    return rating;
+  }
+  public void updateReviews(int enrollment_id,int rating){
+    if(!reviewRepository.existsByEnrollmentId(enrollment_id)){
+      Review review = new Review();
+      review.setRating(rating);
+      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+      review.setComment("");
+      review.setCreated_at(LocalDateTime.now());
+      reviewRepository.save(review);
+    }else{
+      Review review = reviewRepository.findReviewByEnrollmentId(enrollment_id);
+      review.setRating(rating);
+      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+      review.setComment("");
+      review.setCreated_at(LocalDateTime.now());
+      reviewRepository.save(review);
+    }
   }
   public List<CourseResponseDTO> getCourseByTopic(int topicId) {
     if (!courseRepository.existsById(topicId)) {
