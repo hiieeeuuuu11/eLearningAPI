@@ -27,5 +27,6 @@ public class Enrollment {
 
     @Column(nullable = false)
     LocalDateTime enrollment_date;
+
 }
 

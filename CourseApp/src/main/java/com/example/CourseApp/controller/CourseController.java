@@ -69,11 +69,11 @@ public class CourseController {
         return courseService.checkCourseEnrollment(studentId,courseId);
 
     }
-    @PostMapping("/updateReviews")
-    @Operation(summary = "Cập nhật bảng reviews")
-    public void updateReviews(@RequestParam int enrollmentId, @RequestParam int rating) {
-        courseService.updateReviews(enrollmentId,rating);
-    }
+//    @PostMapping("/updateReviews")
+//    @Operation(summary = "Cập nhật bảng reviews")
+//    public void updateReviews(@RequestParam int enrollmentId, @RequestParam int rating) {
+//        courseService.updateReviews(enrollmentId,rating);
+//    }
     @GetMapping("/getRating")
     @Operation(summary = "Kiểm tra khóa học đã đăng ký hay chưa")
     public int getReviewRating(@RequestParam int studentId, @RequestParam int courseId) {

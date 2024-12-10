@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -82,25 +83,25 @@ public class CourseService {
     }
     return rating;
   }
-  public void updateReviews(int enrollment_id,int rating){
-    if(!reviewRepository.existsByEnrollmentId(enrollment_id)){
-      Review review = new Review();
-      review.setRating(rating);
-      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
-              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
-      review.setComment("");
-      review.setCreated_at(LocalDateTime.now());
-      reviewRepository.save(review);
-    }else{
-      Review review = reviewRepository.findReviewByEnrollmentId(enrollment_id);
-      review.setRating(rating);
-      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
-              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
-      review.setComment("");
-      review.setCreated_at(LocalDateTime.now());
-      reviewRepository.save(review);
-    }
-  }
+//  public void updateReviews(int enrollment_id,int rating){
+//    if(!reviewRepository.existsByEnrollmentId(enrollment_id)){
+//      Review review = new Review();
+//      review.setRating(rating);
+//      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+//              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+//      review.setComment("");
+//      review.setCreated_at(LocalDateTime.now());
+//      reviewRepository.save(review);
+//    }else{
+//      Review review = reviewRepository.findReviewByEnrollmentId(enrollment_id);
+//      review.setRating(rating);
+//      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+//              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+//      review.setComment("");
+//      review.setCreated_at(LocalDateTime.now());
+//      reviewRepository.save(review);
+//    }
+//  }
   public List<CourseResponseDTO> getCourseByTopic(int topicId) {
     if (!courseRepository.existsById(topicId)) {
       throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_TOPIC);
@@ -115,15 +116,15 @@ public class CourseService {
     List<Chapter> listChapter = chapterRepository.findChaptersByCourse_Id(course.getId());
     Provider provider = providerRepository.findById(course.getProvider().getId())
         .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND));
-    Enrollment enrollment = enrollmentsRepository.findEnrollmentByCourse_Id(course.getId());
+    var enrollment = enrollmentsRepository.findEnrollmentByCourse_Id(course.getId());
 
-    if (enrollment == null) {
+    if (CollectionUtils.isEmpty(enrollment)) {
       return buildCourseResponseDTO(course, listChapter, provider, null);
     }
 
-    Review review = reviewRepository.findReviewByEnrollmentId(enrollment.getId());
+    List<Review> review = reviewRepository.findReviewsByEnrollmentIn(enrollment).stream().toList();
     ReviewResponseDTO reviewResponseDTO =
-        (review != null) ? new ReviewResponseDTO(review.getRating(), review.getComment()) : null;
+        (!CollectionUtils.isEmpty(review)) ? new ReviewResponseDTO(review.stream().mapToInt(Review::getRating).average().orElse(0), review.stream().map(Review::getComment).toList()) : null;
 
     return buildCourseResponseDTO(course, listChapter, provider, reviewResponseDTO);
   }

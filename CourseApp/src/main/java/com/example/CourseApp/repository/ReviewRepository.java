@@ -2,6 +2,7 @@ package com.example.CourseApp.repository;
 
 import com.example.CourseApp.entity.course.Enrollment;
 import com.example.CourseApp.entity.course.Review;
+import java.util.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review,Integer> {
-    Review findReviewByEnrollmentId(int enrollment_id);
+
+    Collection<Review> findReviewsByEnrollmentIn(Collection<Enrollment> enrollments);
     boolean existsByEnrollmentId(int enrollment_id);
 
     @Query("SELECT r FROM Review r " +

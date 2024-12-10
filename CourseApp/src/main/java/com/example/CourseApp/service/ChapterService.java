@@ -17,47 +17,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChapterService {
 
-    private final ChapterRepository chapterRepository;
-    private final CourseRepository courseRepository;
-    private final LessonRepository lessonRepository;
+  private final ChapterRepository chapterRepository;
+  private final CourseRepository courseRepository;
+  private final LessonRepository lessonRepository;
 
-    public List<Chapter> getAllChapter() {
-        List<Chapter> chapters = chapterRepository.findAll();
-        if (chapters.isEmpty()) {
-            throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_CHAPTER_FOUND);
-        }
-        return chapters;
+  public List<Chapter> getAllChapter() {
+    List<Chapter> chapters = chapterRepository.findAll();
+    if (chapters.isEmpty()) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_CHAPTER_FOUND);
     }
+    return chapters;
+  }
 
-    public List<Chapter> getChapterByCourse(int course_id) {
-        if (courseRepository.findById(course_id).isEmpty()) {
-            throw new BadRequestException("Course không tồn tại với ID: " + course_id);
-        }
-        List<Chapter> chapters = chapterRepository.findChaptersByCourse_Id(course_id);
-        if (chapters.isEmpty()) {
-            throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_CHAPTER_FOUND_FOR_COURSE);
-        }
-        return chapters;
+  public List<Chapter> getChapterByCourse(int course_id) {
+    if (courseRepository.findById(course_id).isEmpty()) {
+      throw new BadRequestException("Course không tồn tại với ID: " + course_id);
     }
-
-    public int getNumberOfChapter(int course_id) {
-        if (courseRepository.findById(course_id).isEmpty()) {
-            throw new BadRequestException("Course không tồn tại với ID: " + course_id);
-        }
-        return chapterRepository.countByCourse_Id(course_id);
+    List<Chapter> chapters = chapterRepository.findChaptersByCourse_Id(course_id);
+    if (chapters.isEmpty()) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_CHAPTER_FOUND_FOR_COURSE);
     }
+    return chapters;
+  }
 
-    public ChapterResponse getChapterById(int id) {
-        return chapterRepository.findById(id)
-            .map(chapter1 -> {
-                return ChapterResponse.builder()
-                    .chapter(chapter1)
-                    .lessonList(lessonRepository.findLessonsByChapter_Id(chapter1.getId()))
-                    .build();
-            })
-                .orElseThrow(() ->
-                        new ObjectNotFoundException(ResponseStatusCodeConst.CHAPTER_NOT_FOUND));
-
-
+  public int getNumberOfChapter(int course_id) {
+    if (courseRepository.findById(course_id).isEmpty()) {
+      throw new BadRequestException("Course không tồn tại với ID: " + course_id);
     }
+    return chapterRepository.countByCourse_Id(course_id);
+  }
+
+  public ChapterResponse getChapterById(int id) {
+    return chapterRepository.findById(id)
+        .map(chapter1 -> ChapterResponse.builder()
+            .chapter(chapter1)
+            .lessonList(lessonRepository.findLessonsByChapter_Id(chapter1.getId()))
+            .build())
+        .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.CHAPTER_NOT_FOUND));
+  }
 }

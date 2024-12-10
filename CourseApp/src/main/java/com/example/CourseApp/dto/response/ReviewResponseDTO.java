@@ -14,6 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewResponseDTO {
-    int rating;
-    String comment;
+    Double rating;
+    List<String> comment;
 }
