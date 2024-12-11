@@ -3,6 +3,7 @@ package com.example.CourseApp.service;
 import com.example.CourseApp.entity.course.Provider;
 import com.example.CourseApp.exceptions.ObjectNotFoundException;
 import com.example.CourseApp.repository.ProviderRepository;
+import com.example.CourseApp.repository.UserRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProviderService {
   private final ProviderRepository providerRepository;
+  private final UserRepository userRepository;
 
   public List<Provider> getProviders() {
     List<Provider> providers = providerRepository.findAll();
@@ -32,6 +34,7 @@ public class ProviderService {
       if(providerRepository.existsById(provider.getId())){
           throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_EXISTED);
       }
+      provider.setUser(userRepository.findById(1).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND)));
     return providerRepository.save(provider);
   }
 
