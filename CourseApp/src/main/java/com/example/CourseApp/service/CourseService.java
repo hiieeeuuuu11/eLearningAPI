@@ -5,7 +5,6 @@ import com.example.CourseApp.dto.response.CourseResponseDTO;
 import com.example.CourseApp.dto.response.ReviewResponseDTO;
 import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.entity.course.Course;
-import com.example.CourseApp.entity.course.Enrollment;
 import com.example.CourseApp.entity.course.Provider;
 import com.example.CourseApp.entity.course.Review;
 import com.example.CourseApp.exceptions.BadRequestException;
@@ -16,11 +15,7 @@ import com.example.CourseApp.repository.EnrollmentsRepository;
 import com.example.CourseApp.repository.ProviderRepository;
 import com.example.CourseApp.repository.ReviewRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +41,14 @@ public class CourseService {
     }
 
     return courses.stream().map(this::mapToCourseResponseDTO).collect(Collectors.toList());
+  }
+
+  public List<Course> getByIds(List<Integer> ids) {
+    var course = courseRepository.findAllById(ids);
+    if (course.isEmpty()) {
+      throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND);
+    }
+    return course;
   }
 
   public CourseResponseDTO getCourseById(int course_id) {

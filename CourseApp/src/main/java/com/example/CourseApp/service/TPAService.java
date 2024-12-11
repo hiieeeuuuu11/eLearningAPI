@@ -1,6 +1,7 @@
 package com.example.CourseApp.service;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,28 +15,23 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class TPAService {
 
-//  public static final  String URL = "https://6907-14-191-39-251.ngrok-free.app/MI_recommend/7";
-//
-//  private final RestTemplate restTemplate;
-//
-//  public String callExternalApi(String url) {
-//    return restTemplate.getForObject(url, String.class);
-//  }
-//
-//  public static List<Integer> convertStringToList(String str) {
-//    str = str.replaceAll("\\[|\\]", ""); // Remove square brackets
-//    return Arrays.stream(str.split(","))
-//        .map(Integer::parseInt)
-//        .collect(Collectors.toList());
-//  }
-//
-//  @Bean
-//  public CommandLineRunner run() {
-//    return args -> {
-//      String response = callExternalApi(URL);
-//      response = response.trim();
-//      System.out.println(convertStringToList(response));
-//    };
-//  }
+  public static final  String URL = "https://6907-14-191-39-251.ngrok-free.app/MI_recommend/7";
+
+  private final RestTemplate restTemplate;
+
+  public String callExternalApi(String url) {
+    return restTemplate.getForObject(url, String.class);
+  }
+
+  public static List<Integer> convertStringToList(String str) {
+    str = str.replaceAll("\\[|\\]", ""); // Remove square brackets
+    return Arrays.stream(str.split(","))
+        .map(Integer::parseInt)
+        .collect(Collectors.toList());
+  }
+
+  public static List<Integer> getRecommendCourseIds(String response) {
+    return convertStringToList(response);
+  }
 
 }
