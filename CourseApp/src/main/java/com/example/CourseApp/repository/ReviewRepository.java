@@ -25,4 +25,6 @@ public interface ReviewRepository extends JpaRepository<Review,Integer> {
             "WHERE e.course.id = :courseId AND e.learner.id = :studentId")
     boolean existsByCourseIdAndStudentId(@Param("courseId") int courseId,
                                          @Param("studentId") int studentId);
+
+    Review getReviewByEnrollment_Id(Integer enrollmentId);
 }

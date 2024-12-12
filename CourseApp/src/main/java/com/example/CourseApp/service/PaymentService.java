@@ -38,6 +38,9 @@ public class PaymentService {
     private EnrollmentsRepository enrollmentsRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
+    private TPAService tpaService;
+
     private BigDecimal calculateTotalPrice(List<Integer> courseID) {
         List<Course> courses = courseRepository.findAllById(courseID);
 
@@ -122,6 +125,7 @@ public class PaymentService {
             enrollment.setCourse(course);
             enrollment.setEnrollment_date(LocalDateTime.now());
             enrollmentsRepository.save(enrollment);
+            tpaService.enroll(course.getId(), learner.getUser().getId());
         } else {
             response.put("message", "Payment Failed");
             response.put("status", "failed");

@@ -30,8 +30,8 @@ public class ProviderController {
   }
 
   @PostMapping
-  public Provider createProvider(@RequestBody Provider Provider) {
-    return providerService.createProvider(Provider);
+  public Provider createProvider(@RequestBody Provider provider) {
+    return providerService.createProvider(provider);
   }
 
   @PutMapping("/{id}")

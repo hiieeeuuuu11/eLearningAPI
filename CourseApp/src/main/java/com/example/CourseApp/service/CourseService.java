@@ -15,6 +15,7 @@ import com.example.CourseApp.repository.EnrollmentsRepository;
 import com.example.CourseApp.repository.ProviderRepository;
 import com.example.CourseApp.repository.ReviewRepository;
 import com.example.CourseApp.share.enums.ResponseStatusCodeConst;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class CourseService {
   private final ProviderRepository providerRepository;
   private final EnrollmentsRepository enrollmentsRepository;
   private final ReviewRepository reviewRepository;
-
+private final TPAService tpaService;
 
   public List<CourseResponseDTO> getAllCourse() {
     List<Course> courses = courseRepository.findAll();
@@ -86,25 +87,29 @@ public class CourseService {
     }
     return rating;
   }
-//  public void updateReviews(int enrollment_id,int rating){
-//    if(!reviewRepository.existsByEnrollmentId(enrollment_id)){
-//      Review review = new Review();
-//      review.setRating(rating);
-//      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
-//              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
-//      review.setComment("");
-//      review.setCreated_at(LocalDateTime.now());
-//      reviewRepository.save(review);
-//    }else{
-//      Review review = reviewRepository.findReviewByEnrollmentId(enrollment_id);
-//      review.setRating(rating);
-//      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
-//              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
-//      review.setComment("");
-//      review.setCreated_at(LocalDateTime.now());
-//      reviewRepository.save(review);
-//    }
-//  }
+
+  public void updateReviews(int enrollment_id,int rating){
+    if(!reviewRepository.existsByEnrollmentId(enrollment_id)){
+      Review review = new Review();
+      review.setRating(rating);
+      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+      review.setComment("");
+      review.setCreated_at(LocalDateTime.now());
+      reviewRepository.save(review);
+    }else{
+      Review review = reviewRepository.getReviewByEnrollment_Id(enrollment_id);
+      review.setRating(rating);
+      review.setEnrollment(enrollmentsRepository.findById(enrollment_id)
+              .orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND)));
+      review.setComment("");
+      review.setCreated_at(LocalDateTime.now());
+      reviewRepository.save(review);
+    }
+    var e = enrollmentsRepository.findById(enrollment_id).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ENROLLMENT_FOUND));
+    tpaService.rating(e.getLearner().getId(),e.getCourse().getId(),rating);
+  }
+
   public List<CourseResponseDTO> getCourseByTopic(int topicId) {
     if (!courseRepository.existsById(topicId)) {
       throw new ObjectNotFoundException(ResponseStatusCodeConst.NO_COURSE_FOUND_FOR_TOPIC);
@@ -140,6 +145,10 @@ public class CourseService {
         .provider(provider)
         .reviewResponseDTO(reviewResponseDTO)
         .build();
+  }
+
+  public List<Course> getByUser(Long userId) {
+    return courseRepository.getCourseEnrolledByUser(userId);
   }
 
 }
