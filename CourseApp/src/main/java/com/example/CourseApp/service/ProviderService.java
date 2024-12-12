@@ -31,10 +31,12 @@ public class ProviderService {
   }
 
   public Provider createProvider(Provider provider) {
-      if(providerRepository.existsById(provider.getId())){
+      int userId=1;
+      if(providerRepository.existsById(provider.getId())||providerRepository.existsByUserId(userId)){
           throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_EXISTED);
       }
-      provider.setUser(userRepository.findById(1).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND)));
+
+      provider.setUser(userRepository.findById(userId).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND)));
     return providerRepository.save(provider);
   }
 
