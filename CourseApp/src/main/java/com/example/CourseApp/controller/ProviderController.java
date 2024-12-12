@@ -1,5 +1,6 @@
 package com.example.CourseApp.controller;
 
+import com.example.CourseApp.dto.UserInfo;
 import com.example.CourseApp.entity.course.Provider;
 import com.example.CourseApp.service.ProviderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +31,8 @@ public class ProviderController {
   }
 
   @PostMapping
-  public Provider createProvider(@RequestBody Provider provider) {
-    return providerService.createProvider(provider);
+  public Provider createProvider(@RequestBody Provider provider,@RequestAttribute(name = "user", required = false) UserInfo user) {
+    return providerService.createProvider(provider, Math.toIntExact(user.getId()));
   }
 
   @PutMapping("/{id}")

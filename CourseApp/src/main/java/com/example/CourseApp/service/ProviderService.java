@@ -30,8 +30,7 @@ public class ProviderService {
         .orElseThrow(() -> new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_NOT_FOUND));
   }
 
-  public Provider createProvider(Provider provider) {
-      int userId=1;
+  public Provider createProvider(Provider provider,Integer userId) {
       if(providerRepository.existsById(provider.getId())||providerRepository.existsByUserId(userId)){
           throw new ObjectNotFoundException(ResponseStatusCodeConst.PROVIDER_EXISTED);
       }

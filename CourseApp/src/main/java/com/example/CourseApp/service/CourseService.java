@@ -5,6 +5,7 @@ import com.example.CourseApp.dto.response.CourseResponseDTO;
 import com.example.CourseApp.dto.response.ReviewResponseDTO;
 import com.example.CourseApp.entity.course.Chapter;
 import com.example.CourseApp.entity.course.Course;
+import com.example.CourseApp.entity.course.Enrollment;
 import com.example.CourseApp.entity.course.Provider;
 import com.example.CourseApp.entity.course.Review;
 import com.example.CourseApp.exceptions.BadRequestException;
@@ -75,7 +76,8 @@ private final TPAService tpaService;
 
   public ApiResConfigDTO checkCourseEnrollment(int student_id, int course_id){
     boolean status = enrollmentsRepository.existsByLearnerIdAndCourseId(student_id, course_id);
-    Integer id = enrollmentsRepository.findEnrollmentByCourseIdAndLearnerId(course_id, student_id).getId();
+    Integer id = enrollmentsRepository.findEnrollmentByCourseIdAndLearnerId(course_id, student_id).map(
+        Enrollment::getId).orElse(null);
     return new ApiResConfigDTO(status, id);
   }
   public int getReviewRating(int studentId,int courseId){
