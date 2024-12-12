@@ -72,7 +72,7 @@ public class PaymentService {
     }
     public Map<String, String> submitOrder(HttpServletRequest request, int id) {
         Order order = orderRepository.findById(id).orElseThrow(()->new ObjectNotFoundException(ResponseStatusCodeConst.NO_ORDER_FOUND));
-        int orderTotal = order.getTotalAmount()*1000;
+        int orderTotal = order.getTotalAmount()*100;
         Payment payment = new Payment();
         payment.setOrder(order);
         payment.setAmount(order.getTotalAmount());
@@ -144,7 +144,7 @@ public class PaymentService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount * 100));
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
